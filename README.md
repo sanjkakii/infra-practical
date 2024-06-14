@@ -58,11 +58,14 @@ The repository structure
   - `database-deployment.yaml`, It launches both DB deployment and as well as the DB service. The service would be available in the name of `mongo` in the same namespace.
   - `application-deployment.yaml` , It launches Application deployment, Service and Ingress. I would be passing the environment variables as mentioned in the repos[1](https://hub.docker.com/_/mongo-express) [2](https://hub.docker.com/_/mongo)
 
+Best practices followed so far.
+- Launched the worker nodes in private subnets with NAT attached.
+- Launched the Ingress on the public subnets, to make it possible used the [mentioned tags](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html#:~:text=Value%20%E2%80%93%201-,Public%20subnets,-%E2%80%93%20Must%20be%20tagged) for the subnets.
+- 
 
-
-Further enhancements planning.
-1. Launch the application in private subnets and launch the ALB ingress in public subnets
-2. Create separate namespaces for both App & DB, define network policy in such way that the inbound to DB application only be allowed from application namespace.
-3. Create and attach persistent volume for DB
+Enhancements planning.
+1. Launch the application in private subnets and launch the ALB ingress in public subnets.
+2. Create separate namespaces for both App & DB as per the spec file `namespace.yaml`, define network policy in such way that the inbound to DB application only be allowed from application namespace.
+3. Create and attach persistent volume for DB and moving the DB from Deployment controller type to statefulset.
 4. Make use of affinity/anti-affinity to make application fault tolerant and use the taints to deploy the DB replicas onto a dedicated hosts.
 5. Helmify the above application
