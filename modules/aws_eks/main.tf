@@ -202,7 +202,7 @@ resource "aws_eks_node_group" "node_group" {
   node_role_arn = "arn:aws:iam::377830127496:role/eksCustomNodeRole"
   subnet_ids = [aws_subnet.pvt_sub1.id, aws_subnet.pvt_sub2.id]
   scaling_config {
-    desired_size = 2
+    desired_size = 3
     max_size = 3
     min_size = 1
   }
