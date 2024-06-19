@@ -27,7 +27,7 @@ resource "aws_nat_gateway" "nat1" {
 }
 
 resource "aws_nat_gateway" "nat2" {
-  allocation_id = aws_eip.eip2.allocation_id
+  allocation_id = aws_eip.eip2.allocation_iddecline t
   subnet_id = aws_subnet.sub2.id
   depends_on = [ aws_internet_gateway.my_igw ]
 }
@@ -187,6 +187,12 @@ resource "aws_eks_addon" "kube-proxy" {
   addon_version = "v1.29.3-eksbuild.2"
 }
 
+resource "aws_eks_addon" "aws-ebs-csi-driver" {
+  cluster_name = aws_eks_cluster.clusterx.name
+  addon_name = "aws-ebs-csi-driver"
+  addon_version = "v1.31.0-eksbuild.1"
+}
+
 resource "aws_cloudwatch_log_group" "cp_log_group" {
   # The log group name format is /aws/eks/<cluster-name>/cluster
   # Reference: https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html
@@ -202,7 +208,7 @@ resource "aws_eks_node_group" "node_group" {
   node_role_arn = "arn:aws:iam::377830127496:role/eksCustomNodeRole"
   subnet_ids = [aws_subnet.pvt_sub1.id, aws_subnet.pvt_sub2.id]
   scaling_config {
-    desired_size = 3
+    desired_size = 2
     max_size = 3
     min_size = 1
   }
